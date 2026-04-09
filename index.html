@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; background: #f5f5f5; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        select, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .checkbox-group { margin-top: 15px; }
+        .checkbox-group label { display: flex; align-items: center; font-weight: normal; margin-top: 8px; }
+        input[type="checkbox"] { width: auto; margin-right: 10px; }
+        button { width: 100%; padding: 12px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .results { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 4px; display: none; }
+        .results.show { display: block; }
+        .result-row { display: flex; justify-content: space-between; margin: 8px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>uBreakiFix Pricing Calculator</h1>
+        
+        <label>Device Type:</label>
+        <select id="deviceType">
+            <option value="">-- Select Device --</option>
+            <option value="Phone">Phone</option>
+            <option value="Tablet">Tablet</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Desktop">Desktop</option>
+            <option value="Console">Console</option>
+        </select>
+
+        <label>Part Cost ($):</label>
+        <input type="number" id="partCost" placeholder="50" min="0" step="0.01">
+
+        <div class="checkbox-group">
+            <label><strong>Add-on Services:</strong></label>
+            <label><input type="checkbox" id="cleaning"> Cleaning - $29.99</label>
+            <label><input type="checkbox" id="dataTransfer"> Data Transfer - $99.99</label>
+            <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - $29.99</label>
+        </div>
+
+        <button onclick="calculateQuote()">Calculate Quote</button>
+
+        <div id="results" class="results">
+            <div class="result-row">
+                <span><strong>Service Cost:</strong></span>
+                <span id="serviceCost">$0.00</span>
+            </div>
+            <div class="result-row">
+                <span><strong>Add-ons Total:</strong></span>
+                <span id="addonsTotal">$0.00</span>
+            </div>
+            <div class="result-row" style="font-size: 18px; border-top: 2px solid #333; padding-top: 10px; margin-top: 10px;">
+                <span><strong>Total Quote:</strong></span>
+                <span id="totalQuote">$0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const addOnPrices = {
+            "cleaning": 29.99,
+            "dataTransfer": 99.99,
+            "protectiveScreen": 29.99
+        };
+
+        const deviceMinimums = {
+            "Phone": 100,
+            "Tablet": 100,
+            "Laptop": 120,
+            "Desktop": 150,
+            "Console": 110
+        };
+
+        document.getElementById("deviceType").addEventListener("change", function() {
+            const device = this.value;
+            const screenLabel = document.getElementById("screenLabel");
+            const screenCheckbox = document.getElementById("protectiveScreen");
+            
+            if (device === "Desktop" || device === "Console") {
+                screenLabel.style.opacity = "0.5";
+                screenCheckbox.disabled = true;
+                screenCheckbox.checked = false;
+            } else {
+                screenLabel.style.opacity = "1";
+                screenCheckbox.disabled = false;
+            }
+        });
+
+        function calculateQuote() {
+            const deviceType = document.getElementById("deviceType").value;
+            const partCost = parseFloat(document.getElementById("partCost").value) || 0;
+
+            if (!deviceType || partCost === 0) {
+                alert("Please select a device and enter a part cost.");
+                return;
+            }
+
+            // Tiered markup
+            let markup;
+            if (partCost < 25) markup = 4;
+            else if (partCost < 100) markup = 3.5;
+            else if (partCost < 250) markup = 3;
+            else markup = 2.5;
+
+            let serviceCost = partCost * markup;
+            const minimum = deviceMinimums[deviceType] || 100;
+            serviceCost = Math.max(serviceCost, minimum);
+
+            // Calculate add-ons
+            let addonsTotal = 0;
+            if (document.getElementById("cleaning").checked) addonsTotal += addOnPrices.cleaning;
+            if (document.getElementById("dataTransfer").checked) addonsTotal += addOnPrices.dataTransfer;
+            if (document.getElementById("protectiveScreen").checked && deviceType !== "Desktop" && deviceType !== "Console") {
+                addonsTotal += addOnPrices.protectiveScreen;
+            }
+
+            const totalQuote = partCost + serviceCost + addonsTotal;
+
+            document.getElementById("serviceCost").textContent = "$" + serviceCost.toFixed(2);
+            document.getElementById("addonsTotal").textContent = "$" + addonsTotal.toFixed(2);
+            document.getElementById("totalQuote").textContent = "$" + totalQuote.toFixed(2);
+            document.getElementById("results").classList.add("show");
+        }
+    </script>
+</body>
+</html>
