@@ -36,9 +36,9 @@
 
         <div class="checkbox-group">
             <label><strong>Add-on Services:</strong></label>
-            <label><input type="checkbox" id="cleaning"> Cleaning - $29.99</label>
+            <label><input type="checkbox" id="cleaning"> Cleaning - <span id="cleaningPrice">$29.99</span></label>
             <label><input type="checkbox" id="dataTransfer"> Data Transfer - $99.99</label>
-            <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - $29.99</label>
+            <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - <span id="screenPrice">$29.99</span></label>
         </div>
 
         <button onclick="calculateQuote()">Calculate Quote</button>
@@ -60,12 +60,6 @@
     </div>
 
     <script>
-        const addOnPrices = {
-            "cleaning": 29.99,
-            "dataTransfer": 99.99,
-            "protectiveScreen": 29.99
-        };
-
         const deviceMinimums = {
             "Phone": 100,
             "Tablet": 100,
@@ -74,18 +68,36 @@
             "Console": 110
         };
 
+        // Add-on pricing by device type
+        const addOnPrices = {
+            "Phone": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 29.99 },
+            "Tablet": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 39.99 },
+            "Laptop": { "cleaning": 99.99, "dataTransfer": 99.99, "protectiveScreen": null },
+            "Desktop": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null },
+            "Console": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null }
+        };
+
         document.getElementById("deviceType").addEventListener("change", function() {
             const device = this.value;
             const screenLabel = document.getElementById("screenLabel");
             const screenCheckbox = document.getElementById("protectiveScreen");
+            const cleaningPrice = document.getElementById("cleaningPrice");
+            const screenPrice = document.getElementById("screenPrice");
             
-            if (device === "Desktop" || device === "Console") {
-                screenLabel.style.opacity = "0.5";
-                screenCheckbox.disabled = true;
-                screenCheckbox.checked = false;
-            } else {
-                screenLabel.style.opacity = "1";
-                screenCheckbox.disabled = false;
+            if (device && addOnPrices[device]) {
+                // Update cleaning price
+                cleaningPrice.textContent = "$" + addOnPrices[device].cleaning.toFixed(2);
+                
+                // Update screen price and enable/disable
+                if (addOnPrices[device].protectiveScreen === null) {
+                    screenLabel.style.opacity = "0.5";
+                    screenCheckbox.disabled = true;
+                    screenCheckbox.checked = false;
+                } else {
+                    screenLabel.style.opacity = "1";
+                    screenCheckbox.disabled = false;
+                    screenPrice.textContent = "$" + addOnPrices[device].protectiveScreen.toFixed(2);
+                }
             }
         });
 
@@ -111,10 +123,16 @@
 
             // Calculate add-ons
             let addonsTotal = 0;
-            if (document.getElementById("cleaning").checked) addonsTotal += addOnPrices.cleaning;
-            if (document.getElementById("dataTransfer").checked) addonsTotal += addOnPrices.dataTransfer;
-            if (document.getElementById("protectiveScreen").checked && deviceType !== "Desktop" && deviceType !== "Console") {
-                addonsTotal += addOnPrices.protectiveScreen;
+            const prices = addOnPrices[deviceType];
+
+            if (document.getElementById("cleaning").checked) {
+                addonsTotal += prices.cleaning;
+            }
+            if (document.getElementById("dataTransfer").checked) {
+                addonsTotal += prices.dataTransfer;
+            }
+            if (document.getElementById("protectiveScreen").checked && prices.protectiveScreen !== null) {
+                addonsTotal += prices.protectiveScreen;
             }
 
             const totalQuote = serviceCost + addonsTotal;
