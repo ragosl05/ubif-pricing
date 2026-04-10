@@ -43,6 +43,7 @@
             <label id="liquidLabel"><input type="checkbox" id="liquidCleaning"> Liquid Cleaning - <span id="liquidPrice">$149.99</span></label>
             <label><input type="checkbox" id="dataTransfer"> Data Transfer - <span id="dataTransferPrice">$149.99</span></label>
             <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - <span id="screenPrice">$29.99</span></label>
+            <label id="softwareLabel"><input type="checkbox" id="software"> Software - <span id="softwarePrice">$149.99</span></label>
             <label id="expeditedLabel"><input type="checkbox" id="expeditedRepair"> Expedited Repair - $49.99</label>
             <div id="expeditedSublabel" class="addon-sublabel">(Less than 72 hours)</div>
         </div>
@@ -76,11 +77,11 @@
 
         // Add-on pricing by device type
         const addOnPrices = {
-            "Phone": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 29.99, "expeditedRepair": null },
-            "Tablet": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 39.99, "expeditedRepair": 49.99 },
-            "Laptop": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "expeditedRepair": 49.99 },
-            "Desktop": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "expeditedRepair": 49.99 },
-            "Console": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "expeditedRepair": 49.99 }
+            "Phone": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 29.99, "software": null, "expeditedRepair": null },
+            "Tablet": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 39.99, "software": null, "expeditedRepair": 49.99 },
+            "Laptop": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
+            "Desktop": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
+            "Console": { "cleaning": 99.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 }
         };
 
         document.getElementById("deviceType").addEventListener("change", function() {
@@ -92,6 +93,9 @@
             const dataTransferPrice = document.getElementById("dataTransferPrice");
             const screenLabel = document.getElementById("screenLabel");
             const screenCheckbox = document.getElementById("protectiveScreen");
+            const softwareLabel = document.getElementById("softwareLabel");
+            const softwareCheckbox = document.getElementById("software");
+            const softwarePrice = document.getElementById("softwarePrice");
             const expeditedLabel = document.getElementById("expeditedLabel");
             const expeditedSublabel = document.getElementById("expeditedSublabel");
             const expeditedCheckbox = document.getElementById("expeditedRepair");
@@ -124,6 +128,17 @@
                     screenLabel.style.opacity = "1";
                     screenCheckbox.disabled = false;
                     screenPrice.textContent = "$" + addOnPrices[device].protectiveScreen.toFixed(2);
+                }
+
+                // Update software price and enable/disable
+                if (addOnPrices[device].software === null) {
+                    softwareLabel.style.opacity = "0.5";
+                    softwareCheckbox.disabled = true;
+                    softwareCheckbox.checked = false;
+                } else {
+                    softwareLabel.style.opacity = "1";
+                    softwareCheckbox.disabled = false;
+                    softwarePrice.textContent = "$" + addOnPrices[device].software.toFixed(2);
                 }
 
                 // Update expedited repair and enable/disable
@@ -175,6 +190,9 @@
             }
             if (document.getElementById("protectiveScreen").checked && prices.protectiveScreen !== null) {
                 addonsTotal += prices.protectiveScreen;
+            }
+            if (document.getElementById("software").checked && prices.software !== null) {
+                addonsTotal += prices.software;
             }
             if (document.getElementById("expeditedRepair").checked && prices.expeditedRepair !== null) {
                 addonsTotal += prices.expeditedRepair;
