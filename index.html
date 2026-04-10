@@ -117,7 +117,7 @@
                 addonsTotal += addOnPrices.protectiveScreen;
             }
 
-            const totalQuote = partCost + serviceCost + addonsTotal;
+            const totalQuote = serviceCost + addonsTotal;
 
             document.getElementById("serviceCost").textContent = "$" + serviceCost.toFixed(2);
             document.getElementById("addonsTotal").textContent = "$" + addonsTotal.toFixed(2);
