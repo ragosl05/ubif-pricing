@@ -10,6 +10,7 @@
         .checkbox-group { margin-top: 15px; }
         .checkbox-group label { display: flex; align-items: center; font-weight: normal; margin-top: 8px; }
         input[type="checkbox"] { width: auto; margin-right: 10px; }
+        .addon-sublabel { font-size: 0.85em; color: #888; margin-left: 24px; margin-top: 2px; }
         button { width: 100%; padding: 12px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
         button:hover { background: #0056b3; }
         .results { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 4px; display: none; }
@@ -39,6 +40,8 @@
             <label><input type="checkbox" id="cleaning"> Cleaning - <span id="cleaningPrice">$29.99</span></label>
             <label><input type="checkbox" id="dataTransfer"> Data Transfer - $99.99</label>
             <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - <span id="screenPrice">$29.99</span></label>
+            <label id="expeditedLabel"><input type="checkbox" id="expeditedRepair"> Expedited Repair - $29.99</label>
+            <div id="expeditedSublabel" class="addon-sublabel">(Less than 72 hours)</div>
         </div>
 
         <button onclick="calculateQuote()">Calculate Quote</button>
@@ -70,17 +73,20 @@
 
         // Add-on pricing by device type
         const addOnPrices = {
-            "Phone": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 29.99 },
-            "Tablet": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 39.99 },
-            "Laptop": { "cleaning": 99.99, "dataTransfer": 99.99, "protectiveScreen": null },
-            "Desktop": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null },
-            "Console": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null }
+            "Phone": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 29.99, "expeditedRepair": null },
+            "Tablet": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": 39.99, "expeditedRepair": 29.99 },
+            "Laptop": { "cleaning": 99.99, "dataTransfer": 99.99, "protectiveScreen": null, "expeditedRepair": 29.99 },
+            "Desktop": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null, "expeditedRepair": 29.99 },
+            "Console": { "cleaning": 29.99, "dataTransfer": 99.99, "protectiveScreen": null, "expeditedRepair": 29.99 }
         };
 
         document.getElementById("deviceType").addEventListener("change", function() {
             const device = this.value;
             const screenLabel = document.getElementById("screenLabel");
             const screenCheckbox = document.getElementById("protectiveScreen");
+            const expeditedLabel = document.getElementById("expeditedLabel");
+            const expeditedSublabel = document.getElementById("expeditedSublabel");
+            const expeditedCheckbox = document.getElementById("expeditedRepair");
             const cleaningPrice = document.getElementById("cleaningPrice");
             const screenPrice = document.getElementById("screenPrice");
             
@@ -97,6 +103,18 @@
                     screenLabel.style.opacity = "1";
                     screenCheckbox.disabled = false;
                     screenPrice.textContent = "$" + addOnPrices[device].protectiveScreen.toFixed(2);
+                }
+
+                // Update expedited repair and enable/disable
+                if (addOnPrices[device].expeditedRepair === null) {
+                    expeditedLabel.style.opacity = "0.5";
+                    expeditedSublabel.style.opacity = "0.5";
+                    expeditedCheckbox.disabled = true;
+                    expeditedCheckbox.checked = false;
+                } else {
+                    expeditedLabel.style.opacity = "1";
+                    expeditedSublabel.style.opacity = "1";
+                    expeditedCheckbox.disabled = false;
                 }
             }
         });
@@ -133,6 +151,9 @@
             }
             if (document.getElementById("protectiveScreen").checked && prices.protectiveScreen !== null) {
                 addonsTotal += prices.protectiveScreen;
+            }
+            if (document.getElementById("expeditedRepair").checked && prices.expeditedRepair !== null) {
+                addonsTotal += prices.expeditedRepair;
             }
 
             const totalQuote = serviceCost + addonsTotal;
