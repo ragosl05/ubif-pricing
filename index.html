@@ -164,12 +164,11 @@
                 return;
             }
 
-            // Tiered markup
+            // Updated tiered markup
             let markup;
-            if (partCost < 25) markup = 4;
-            else if (partCost < 100) markup = 3.5;
-            else if (partCost < 250) markup = 3;
-            else markup = 2.5;
+            if (partCost < 50) markup = 4;
+            else if (partCost <= 100) markup = 2.5;
+            else markup = 2;
 
             let serviceCost = partCost * markup;
             const minimum = deviceMinimums[deviceType] || 100;
