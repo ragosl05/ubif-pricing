@@ -155,6 +155,12 @@
             }
         });
 
+        function roundToNearestNine99(price) {
+            // Round to nearest 9, then add .99
+            const rounded = Math.ceil(price / 10) * 10;
+            return rounded - 0.01;
+        }
+
         function calculateQuote() {
             const deviceType = document.getElementById("deviceType").value;
             const partCost = parseFloat(document.getElementById("partCost").value) || 0;
@@ -167,12 +173,15 @@
             // Updated tiered markup
             let markup;
             if (partCost < 50) markup = 4;
-            else if (partCost <= 100) markup = 2.5;
-            else markup = 2;
+            else if (partCost <= 100) markup = 2.75;
+            else markup = 2.25;
 
             let serviceCost = partCost * markup;
             const minimum = deviceMinimums[deviceType] || 100;
             serviceCost = Math.max(serviceCost, minimum);
+            
+            // Round to nearest 9.99
+            serviceCost = roundToNearestNine99(serviceCost);
 
             // Calculate add-ons
             let addonsTotal = 0;
