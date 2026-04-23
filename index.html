@@ -1,225 +1,433 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uBreakiFix Pricing Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; background: #f5f5f5; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; }
-        .atc-banner { background: #f0e6ff; border: 2px solid #9370db; border-radius: 6px; padding: 12px; margin-top: 15px; margin-bottom: 20px; text-align: center; color: #6a0dad; font-weight: bold; font-size: 14px; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        select, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .checkbox-group { margin-top: 15px; }
-        .checkbox-group label { display: flex; align-items: center; font-weight: normal; margin-top: 8px; }
-        input[type="checkbox"] { width: auto; margin-right: 10px; }
-        .addon-sublabel { font-size: 0.85em; color: #888; margin-left: 24px; margin-top: 2px; }
-        button { width: 100%; padding: 12px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .results { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 4px; display: none; }
-        .results.show { display: block; }
-        .result-row { display: flex; justify-content: space-between; margin: 8px 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 1.3em;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .btn-reset:hover {
+            background: #e8e8e8;
+        }
+
+        .results {
+            background: #f8f9fa;
+            border-left: 5px solid #ff6b35;
+            padding: 25px;
+            border-radius: 6px;
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1.05em;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-row.total {
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 3px solid #ff6b35;
+            font-size: 1.3em;
+            color: #ff6b35;
+        }
+
+        .result-row.total .result-value {
+            color: #ff6b35;
+            font-size: 1.4em;
+        }
+
+        .addon-group {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 2px solid #f0f0f0;
+            transition: border-color 0.3s;
+        }
+
+        .addon-group:hover {
+            border-color: #ff6b35;
+        }
+
+        .addon-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #ff6b35;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .addon-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .addon-price {
+            color: #ff6b35;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .addon-description {
+            font-size: 0.9em;
+            color: #999;
+            margin-left: 30px;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #388e3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>uBreakiFix Pricing Calculator</h1>
-        <div class="atc-banner">ATC Members: Get 10% off Accessories/repairs</div>
-        
-        <label>Device Type:</label>
-        <select id="deviceType">
-            <option value="">-- Select Device --</option>
-            <option value="Phone">Phone</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Laptop">Laptop</option>
-            <option value="Desktop">Desktop</option>
-            <option value="Console">Console</option>
-        </select>
-
-        <label>Part Cost ($):</label>
-        <input type="number" id="partCost" placeholder="50" min="0" step="0.01">
-
-        <div class="checkbox-group">
-            <label><strong>Add-on Services:</strong></label>
-            <label><input type="checkbox" id="cleaning"> Basic Cleaning - <span id="cleaningPrice">$29.99</span></label>
-            <label id="liquidLabel"><input type="checkbox" id="liquidCleaning"> Liquid Cleaning - <span id="liquidPrice">$149.99</span></label>
-            <label><input type="checkbox" id="dataTransfer"> Data Transfer - <span id="dataTransferPrice">$149.99</span></label>
-            <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - <span id="screenPrice">$29.99</span></label>
-            <label id="softwareLabel"><input type="checkbox" id="software"> Software - <span id="softwarePrice">$149.99</span></label>
-            <label id="expeditedLabel"><input type="checkbox" id="expeditedRepair"> Expedited Repair - $49.99</label>
-            <div id="expeditedSublabel" class="addon-sublabel">(Less than 72 hours)</div>
+        <div class="header">
+            <h1>📱 uBreakiFix Pricing Calculator</h1>
+            <p>Calculate device repair costs with tiered markup pricing</p>
         </div>
 
-        <button onclick="calculateQuote()">Calculate Quote</button>
+        <div class="content">
+            <form id="calculatorForm">
+                <!-- Device Selection Section -->
+                <div class="form-section">
+                    <h2>Device Information</h2>
+                    
+                    <div class="two-column">
+                        <div class="form-group">
+                            <label for="deviceType">Device Type *</label>
+                            <select id="deviceType" required>
+                                <option value="">Select a device...</option>
+                                <option value="Phone">Phone</option>
+                                <option value="Tablet">Tablet</option>
+                                <option value="Laptop">Laptop</option>
+                                <option value="Desktop">Desktop</option>
+                                <option value="Console">Console</option>
+                            </select>
+                            <div class="error" id="deviceTypeError"></div>
+                        </div>
 
-        <div id="results" class="results">
-            <div class="result-row">
-                <span><strong>Service Cost:</strong></span>
-                <span id="serviceCost">$0.00</span>
-            </div>
-            <div class="result-row">
-                <span><strong>Add-ons Total:</strong></span>
-                <span id="addonsTotal">$0.00</span>
-            </div>
-            <div class="result-row" style="font-size: 18px; border-top: 2px solid #333; padding-top: 10px; margin-top: 10px;">
-                <span><strong>Total Quote:</strong></span>
-                <span id="totalQuote">$0.00</span>
+                        <div class="form-group">
+                            <label for="partCost">Part Cost ($) *</label>
+                            <input type="number" id="partCost" placeholder="Enter part cost" step="0.01" min="0" required>
+                            <div class="error" id="partCostError"></div>
+                        </div>
+                    </div>
+
+                    <div class="two-column">
+                        <div class="form-group">
+                            <label for="laborCost">Labor Cost ($)</label>
+                            <input type="number" id="laborCost" placeholder="Enter labor cost (optional)" step="0.01" min="0" value="0">
+                            <div class="error" id="laborCostError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="deviceName">Device Name/Notes</label>
+                            <input type="text" id="deviceName" placeholder="e.g., iPhone 14 Pro screen replacement">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add-On Services Section -->
+                <div class="form-section">
+                    <h2>Add-On Services</h2>
+                    
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" id="addon1" value="10" data-name="Extended Warranty (1 Year)">
+                            <span>Extended Warranty (1 Year)</span>
+                            <span class="addon-price">$10.00</span>
+                        </label>
+                        <div class="addon-description">Full coverage protection for 12 months</div>
+                    </div>
+
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" id="addon2" value="25" data-name="Data Recovery Service">
+                            <span>Data Recovery Service</span>
+                            <span class="addon-price">$25.00</span>
+                        </label>
+                        <div class="addon-description">Professional data recovery and transfer</div>
+                    </div>
+
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" id="addon3" value="15" data-name="Screen Protector Installation">
+                            <span>Screen Protector Installation</span>
+                            <span class="addon-price">$15.00</span>
+                        </label>
+                        <div class="addon-description">Premium tempered glass installation</div>
+                    </div>
+
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" class="addon-checkbox" id="addon4" value="20" data-name="Priority Repair (24-Hour Turnaround)">
+                            <span>Priority Repair (24-Hour Turnaround)</span>
+                            <span class="addon-price">$20.00</span>
+                        </label>
+                        <div class="addon-description">Expedited service with guaranteed 24-hour completion</div>
+                    </div>
+                </div>
+
+                <!-- Member Discount Section -->
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="memberDiscount">
+                            <input type="checkbox" id="memberDiscount">
+                            <span style="font-weight: 600; margin-left: 8px;">Apply 10% ATC Member Discount</span>
+                        </label>
+                        <div class="success" id="discountInfo"></div>
+                    </div>
+                </div>
+
+                <!-- Buttons Section -->
+                <div class="button-group">
+                    <button type="submit" class="btn-calculate">Calculate Price</button>
+                    <button type="reset" class="btn-reset">Clear Form</button>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            <div class="results" id="results">
+                <div class="result-row">
+                    <span class="result-label">Part Cost:</span>
+                    <span class="result-value" id="resultPartCost">$0.00</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Markup Applied:</span>
+                    <span class="result-value" id="resultMarkup">0x</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Marked-up Part Cost:</span>
+                    <span class="result-value" id="resultMarkedUpCost">$0.00</span>
+                </div>
+                <div class="result-row" id="laborRow" style="display: none;">
+                    <span class="result-label">Labor Cost:</span>
+                    <span class="result-value" id="resultLaborCost">$0.00</span>
+                </div>
+                <div class="result-row" id="addonRow" style="display: none;">
+                    <span class="result-label">Add-On Services:</span>
+                    <span class="result-value" id="resultAddons">$0.00</span>
+                </div>
+                <div class="result-row" id="subtotalRow" style="display: none;">
+                    <span class="result-label">Subtotal:</span>
+                    <span class="result-value" id="resultSubtotal">$0.00</span>
+                </div>
+                <div class="result-row" id="discountRow" style="display: none;">
+                    <span class="result-label">ATC Member Discount (10%):</span>
+                    <span class="result-value" id="resultDiscount">-$0.00</span>
+                </div>
+                <div class="result-row total">
+                    <span class="result-label">Final Price:</span>
+                    <span class="result-value" id="resultFinalPrice">$0.00</span>
+                </div>
+                <div class="result-row" id="notesRow" style="display: none; margin-top: 15px;">
+                    <span class="result-label">Device Notes:</span>
+                    <span class="result-value" id="resultNotes"></span>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const deviceMinimums = {
-            "Phone": 100,
-            "Tablet": 100,
-            "Laptop": 120,
-            "Desktop": 150,
-            "Console": 110
-        };
+        // Utility function to round to nearest .99
+        function roundToNearestNine99(value) {
+            const dollars = Math.floor(value);
+            return dollars + 0.99;
+        }
 
-        // Add-on pricing by device type
-        const addOnPrices = {
-            "Phone": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 29.99, "software": null, "expeditedRepair": null },
-            "Tablet": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 39.99, "software": null, "expeditedRepair": 49.99 },
-            "Laptop": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
-            "Desktop": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
-            "Console": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 }
-        };
-
-        document.getElementById("deviceType").addEventListener("change", function() {
-            const device = this.value;
-            const cleaningPrice = document.getElementById("cleaningPrice");
-            const liquidLabel = document.getElementById("liquidLabel");
-            const liquidCheckbox = document.getElementById("liquidCleaning");
-            const liquidPrice = document.getElementById("liquidPrice");
-            const dataTransferPrice = document.getElementById("dataTransferPrice");
-            const screenLabel = document.getElementById("screenLabel");
-            const screenCheckbox = document.getElementById("protectiveScreen");
-            const softwareLabel = document.getElementById("softwareLabel");
-            const softwareCheckbox = document.getElementById("software");
-            const softwarePrice = document.getElementById("softwarePrice");
-            const expeditedLabel = document.getElementById("expeditedLabel");
-            const expeditedSublabel = document.getElementById("expeditedSublabel");
-            const expeditedCheckbox = document.getElementById("expeditedRepair");
-            const screenPrice = document.getElementById("screenPrice");
-            
-            if (device && addOnPrices[device]) {
-                // Update cleaning price
-                cleaningPrice.textContent = "$" + addOnPrices[device].cleaning.toFixed(2);
-                
-                // Update liquid cleaning price and enable/disable
-                if (addOnPrices[device].liquidCleaning === null) {
-                    liquidLabel.style.opacity = "0.5";
-                    liquidCheckbox.disabled = true;
-                    liquidCheckbox.checked = false;
-                } else {
-                    liquidLabel.style.opacity = "1";
-                    liquidCheckbox.disabled = false;
-                    liquidPrice.textContent = "$" + addOnPrices[device].liquidCleaning.toFixed(2);
-                }
-
-                // Update data transfer price
-                dataTransferPrice.textContent = "$" + addOnPrices[device].dataTransfer.toFixed(2);
-
-                // Update screen price and enable/disable
-                if (addOnPrices[device].protectiveScreen === null) {
-                    screenLabel.style.opacity = "0.5";
-                    screenCheckbox.disabled = true;
-                    screenCheckbox.checked = false;
-                } else {
-                    screenLabel.style.opacity = "1";
-                    screenCheckbox.disabled = false;
-                    screenPrice.textContent = "$" + addOnPrices[device].protectiveScreen.toFixed(2);
-                }
-
-                // Update software price and enable/disable
-                if (addOnPrices[device].software === null) {
-                    softwareLabel.style.opacity = "0.5";
-                    softwareCheckbox.disabled = true;
-                    softwareCheckbox.checked = false;
-                } else {
-                    softwareLabel.style.opacity = "1";
-                    softwareCheckbox.disabled = false;
-                    softwarePrice.textContent = "$" + addOnPrices[device].software.toFixed(2);
-                }
-
-                // Update expedited repair and enable/disable
-                if (addOnPrices[device].expeditedRepair === null) {
-                    expeditedLabel.style.opacity = "0.5";
-                    expeditedSublabel.style.opacity = "0.5";
-                    expeditedCheckbox.disabled = true;
-                    expeditedCheckbox.checked = false;
-                } else {
-                    expeditedLabel.style.opacity = "1";
-                    expeditedSublabel.style.opacity = "1";
-                    expeditedCheckbox.disabled = false;
-                }
-            }
+        // Form submission
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculatePrice();
         });
 
-        function roundToNearestNine99(price) {
-            // Round to nearest 9, then add .99
-            const rounded = Math.ceil(price / 10) * 10;
-            return rounded - 0.01;
-        }
-
-        function calculateQuote() {
-            const deviceType = document.getElementById("deviceType").value;
-            const partCost = parseFloat(document.getElementById("partCost").value) || 0;
-
-            if (!deviceType || partCost === 0) {
-                alert("Please select a device and enter a part cost.");
-                return;
-            }
-
-            // Tiered markup - different for Phone/Tablet vs others
-            let markup;
-            if (deviceType === "Phone" || deviceType === "Tablet") {
-                if (partCost < 50) markup = 2.25;
-                else if (partCost <= 100) markup = 2.0;
-                else markup = 1.50;
-            } else {
-                // Other devices keep original markup
-                if (partCost < 50) markup = 4;
-                else if (partCost <= 100) markup = 2.75;
-                else markup = 2.25;
-            }
-
-            let serviceCost = partCost * markup;
-            const minimum = deviceMinimums[deviceType] || 100;
-            serviceCost = Math.max(serviceCost, minimum);
-            
-            // Round to nearest 9.99
-            serviceCost = roundToNearestNine99(serviceCost);
-
-            // Calculate add-ons
-            let addonsTotal = 0;
-            const prices = addOnPrices[deviceType];
-
-            if (document.getElementById("cleaning").checked) {
-                addonsTotal += prices.cleaning;
-            }
-            if (document.getElementById("liquidCleaning").checked && prices.liquidCleaning !== null) {
-                addonsTotal += prices.liquidCleaning;
-            }
-            if (document.getElementById("dataTransfer").checked) {
-                addonsTotal += prices.dataTransfer;
-            }
-            if (document.getElementById("protectiveScreen").checked && prices.protectiveScreen !== null) {
-                addonsTotal += prices.protectiveScreen;
-            }
-            if (document.getElementById("software").checked && prices.software !== null) {
-                addonsTotal += prices.software;
-            }
-            if (document.getElementById("expeditedRepair").checked && prices.expeditedRepair !== null) {
-                addonsTotal += prices.expeditedRepair;
-            }
-
-            const totalQuote = serviceCost + addonsTotal;
-
-            document.getElementById("serviceCost").textContent = "$" + serviceCost.toFixed(2);
-            document.getElementById("addonsTotal").textContent = "$" + addonsTotal.toFixed(2);
-            document.getElementById("totalQuote").textContent = "$" + totalQuote.toFixed(2);
-            document.getElementById("results").classList.add("show");
-        }
-    </script>
-</body>
-</html>
+        //
