@@ -1,66 +1,244 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uBreakiFix Pricing Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 500px; margin: 20px auto; background: #f5f5f5; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; }
-        .atc-banner { background: #f0e6ff; border: 2px solid #9370db; border-radius: 6px; padding: 12px; margin-top: 15px; margin-bottom: 20px; text-align: center; color: #6a0dad; font-weight: bold; font-size: 14px; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        select, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-        .checkbox-group { margin-top: 15px; }
-        .checkbox-group label { display: flex; align-items: center; font-weight: normal; margin-top: 8px; }
-        input[type="checkbox"] { width: auto; margin-right: 10px; }
-        .addon-sublabel { font-size: 0.85em; color: #888; margin-left: 24px; margin-top: 2px; }
-        button { width: 100%; padding: 12px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .results { margin-top: 20px; padding: 15px; background: #e7f3ff; border-radius: 4px; display: none; }
-        .results.show { display: block; }
-        .result-row { display: flex; justify-content: space-between; margin: 8px 0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .banner {
+            background-color: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-on-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .add-on-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .add-on-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .add-on-item.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .add-on-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .add-on-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .result-row.total {
+            border-top: 2px solid #667eea;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-size: 13px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
+    <div class="banner">
+        🎉 10% ATC Member Discount Available - Ask Us How!
+    </div>
+
     <div class="container">
         <h1>uBreakiFix Pricing Calculator</h1>
-        <div class="atc-banner">ATC Members: Get 10% off Accessories/repairs</div>
-        
-        <label>Device Type:</label>
-        <select id="deviceType">
-            <option value="">-- Select Device --</option>
-            <option value="Phone">Phone</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Laptop">Laptop</option>
-            <option value="Desktop">Desktop</option>
-            <option value="Console">Console</option>
-        </select>
 
-        <label>Part Cost ($):</label>
-        <input type="number" id="partCost" placeholder="50" min="0" step="0.01">
+        <form id="pricingForm">
+            <div class="form-group">
+                <label for="deviceType">Device Type</label>
+                <select id="deviceType" required>
+                    <option value="">Select a device...</option>
+                    <option value="Phone">Phone</option>
+                    <option value="Tablet">Tablet</option>
+                    <option value="Laptop">Laptop</option>
+                    <option value="Desktop">Desktop</option>
+                    <option value="Console">Console</option>
+                </select>
+            </div>
 
-        <div class="checkbox-group">
-            <label><strong>Add-on Services:</strong></label>
-            <label><input type="checkbox" id="cleaning"> Basic Cleaning - <span id="cleaningPrice">$29.99</span></label>
-            <label id="liquidLabel"><input type="checkbox" id="liquidCleaning"> Liquid Cleaning - <span id="liquidPrice">$149.99</span></label>
-            <label><input type="checkbox" id="dataTransfer"> Data Transfer - <span id="dataTransferPrice">$149.99</span></label>
-            <label id="screenLabel"><input type="checkbox" id="protectiveScreen"> Protective Screen - <span id="screenPrice">$29.99</span></label>
-            <label id="softwareLabel"><input type="checkbox" id="software"> Software - <span id="softwarePrice">$149.99</span></label>
-            <label id="expeditedLabel"><input type="checkbox" id="expeditedRepair"> Expedited Repair - $49.99</label>
-            <div id="expeditedSublabel" class="addon-sublabel">(Less than 72 hours)</div>
-        </div>
+            <div class="form-group">
+                <label for="partCost">Part Cost ($)</label>
+                <input type="number" id="partCost" placeholder="Enter part cost" step="0.01" min="0" required>
+                <div class="error" id="partCostError"></div>
+            </div>
 
-        <button onclick="calculateQuote()">Calculate Quote</button>
+            <div class="add-on-section">
+                <h3>Add-On Services</h3>
+                <div class="add-on-item" id="basicCleaningItem">
+                    <input type="checkbox" id="basicCleaning" name="addons">
+                    <label for="basicCleaning">Basic Cleaning ($29.99–$119.99)</label>
+                </div>
+                <div class="add-on-item" id="liquidCleaningItem">
+                    <input type="checkbox" id="liquidCleaning" name="addons">
+                    <label for="liquidCleaning">Liquid Cleaning ($149.99–$199.99)</label>
+                </div>
+                <div class="add-on-item" id="dataTransferItem">
+                    <input type="checkbox" id="dataTransfer" name="addons">
+                    <label for="dataTransfer">Data Transfer ($149.99)</label>
+                </div>
+                <div class="add-on-item" id="protectiveScreenItem">
+                    <input type="checkbox" id="protectiveScreen" name="addons">
+                    <label for="protectiveScreen">Protective Screen ($29.99–$39.99)</label>
+                </div>
+                <div class="add-on-item" id="softwareItem">
+                    <input type="checkbox" id="software" name="addons">
+                    <label for="software">Software ($149.99)</label>
+                </div>
+                <div class="add-on-item" id="expeditedRepairItem">
+                    <input type="checkbox" id="expeditedRepair" name="addons">
+                    <label for="expeditedRepair">Expedited Repair ($49.99)</label>
+                </div>
+            </div>
 
-        <div id="results" class="results">
+            <button type="submit">Calculate Quote</button>
+        </form>
+
+        <div class="results" id="results">
             <div class="result-row">
-                <span><strong>Service Cost:</strong></span>
-                <span id="serviceCost">$0.00</span>
+                <span>Labor Cost:</span>
+                <span id="laborCost">$0.00</span>
             </div>
             <div class="result-row">
-                <span><strong>Add-ons Total:</strong></span>
-                <span id="addonsTotal">$0.00</span>
+                <span>Add-On Services:</span>
+                <span id="addOnsCost">$0.00</span>
             </div>
-            <div class="result-row" style="font-size: 18px; border-top: 2px solid #333; padding-top: 10px; margin-top: 10px;">
-                <span><strong>Total Quote:</strong></span>
+            <div class="result-row total">
+                <span>Total Quote:</span>
                 <span id="totalQuote">$0.00</span>
             </div>
         </div>
@@ -75,151 +253,107 @@
             "Console": 110
         };
 
-        // Add-on pricing by device type
         const addOnPrices = {
-            "Phone": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 29.99, "software": null, "expeditedRepair": null },
-            "Tablet": { "cleaning": 29.99, "liquidCleaning": 149.99, "dataTransfer": 149.99, "protectiveScreen": 39.99, "software": null, "expeditedRepair": 49.99 },
-            "Laptop": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
-            "Desktop": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 },
-            "Console": { "cleaning": 119.99, "liquidCleaning": 199.99, "dataTransfer": 149.99, "protectiveScreen": null, "software": 149.99, "expeditedRepair": 49.99 }
+            "basicCleaning": { min: 29.99, max: 119.99 },
+            "liquidCleaning": { min: 149.99, max: 199.99 },
+            "dataTransfer": 149.99,
+            "protectiveScreen": { min: 29.99, max: 39.99 },
+            "software": 149.99,
+            "expeditedRepair": 49.99
         };
 
-        document.getElementById("deviceType").addEventListener("change", function() {
-            const device = this.value;
-            const cleaningPrice = document.getElementById("cleaningPrice");
-            const liquidLabel = document.getElementById("liquidLabel");
-            const liquidCheckbox = document.getElementById("liquidCleaning");
-            const liquidPrice = document.getElementById("liquidPrice");
-            const dataTransferPrice = document.getElementById("dataTransferPrice");
-            const screenLabel = document.getElementById("screenLabel");
-            const screenCheckbox = document.getElementById("protectiveScreen");
-            const softwareLabel = document.getElementById("softwareLabel");
-            const softwareCheckbox = document.getElementById("software");
-            const softwarePrice = document.getElementById("softwarePrice");
-            const expeditedLabel = document.getElementById("expeditedLabel");
-            const expeditedSublabel = document.getElementById("expeditedSublabel");
-            const expeditedCheckbox = document.getElementById("expeditedRepair");
-            const screenPrice = document.getElementById("screenPrice");
-            
-            if (device && addOnPrices[device]) {
-                // Update cleaning price
-                cleaningPrice.textContent = "$" + addOnPrices[device].cleaning.toFixed(2);
-                
-                // Update liquid cleaning price and enable/disable
-                if (addOnPrices[device].liquidCleaning === null) {
-                    liquidLabel.style.opacity = "0.5";
-                    liquidCheckbox.disabled = true;
-                    liquidCheckbox.checked = false;
-                } else {
-                    liquidLabel.style.opacity = "1";
-                    liquidCheckbox.disabled = false;
-                    liquidPrice.textContent = "$" + addOnPrices[device].liquidCleaning.toFixed(2);
-                }
+        const addOnAvailability = {
+            "Phone": ["basicCleaning", "liquidCleaning", "dataTransfer", "protectiveScreen", "software", "expeditedRepair"],
+            "Tablet": ["basicCleaning", "liquidCleaning", "dataTransfer", "protectiveScreen", "software", "expeditedRepair"],
+            "Laptop": ["basicCleaning", "liquidCleaning", "dataTransfer", "software", "expeditedRepair"],
+            "Desktop": ["basicCleaning", "software", "expeditedRepair"],
+            "Console": ["basicCleaning", "expeditedRepair"]
+        };
 
-                // Update data transfer price
-                dataTransferPrice.textContent = "$" + addOnPrices[device].dataTransfer.toFixed(2);
+        function roundToNearestNine99(value) {
+            const remainder = value % 1;
+            const base = Math.floor(value);
 
-                // Update screen price and enable/disable
-                if (addOnPrices[device].protectiveScreen === null) {
-                    screenLabel.style.opacity = "0.5";
-                    screenCheckbox.disabled = true;
-                    screenCheckbox.checked = false;
-                } else {
-                    screenLabel.style.opacity = "1";
-                    screenCheckbox.disabled = false;
-                    screenPrice.textContent = "$" + addOnPrices[device].protectiveScreen.toFixed(2);
-                }
-
-                // Update software price and enable/disable
-                if (addOnPrices[device].software === null) {
-                    softwareLabel.style.opacity = "0.5";
-                    softwareCheckbox.disabled = true;
-                    softwareCheckbox.checked = false;
-                } else {
-                    softwareLabel.style.opacity = "1";
-                    softwareCheckbox.disabled = false;
-                    softwarePrice.textContent = "$" + addOnPrices[device].software.toFixed(2);
-                }
-
-                // Update expedited repair and enable/disable
-                if (addOnPrices[device].expeditedRepair === null) {
-                    expeditedLabel.style.opacity = "0.5";
-                    expeditedSublabel.style.opacity = "0.5";
-                    expeditedCheckbox.disabled = true;
-                    expeditedCheckbox.checked = false;
-                } else {
-                    expeditedLabel.style.opacity = "1";
-                    expeditedSublabel.style.opacity = "1";
-                    expeditedCheckbox.disabled = false;
-                }
+            if (remainder < 0.5) {
+                return base + 0.99;
+            } else if (remainder < 0.99) {
+                return base + 0.99;
+            } else {
+                return base + 1 + 0.99;
             }
-        });
-
-        function roundToNearestNine99(price) {
-            // Round to nearest 9, then add .99
-            const rounded = Math.ceil(price / 10) * 10;
-            return rounded - 0.01;
         }
 
-        function calculateQuote() {
+        function updateAddOnAvailability() {
             const deviceType = document.getElementById("deviceType").value;
-            const partCost = parseFloat(document.getElementById("partCost").value) || 0;
+            const availableAddOns = addOnAvailability[deviceType] || [];
 
-            if (!deviceType || partCost === 0) {
-                alert("Please select a device and enter a part cost.");
+            Object.keys(addOnPrices).forEach(addOnId => {
+                const item = document.getElementById(addOnId + "Item");
+                const checkbox = document.getElementById(addOnId);
+
+                if (availableAddOns.includes(addOnId)) {
+                    item.classList.remove("disabled");
+                } else {
+                    item.classList.add("disabled");
+                    checkbox.checked = false;
+                }
+            });
+        }
+
+        function calculateQuote(event) {
+            event.preventDefault();
+
+            const deviceType = document.getElementById("deviceType").value;
+            const partCost = parseFloat(document.getElementById("partCost").value);
+            const partCostError = document.getElementById("partCostError");
+
+            partCostError.textContent = "";
+
+            if (!deviceType || isNaN(partCost) || partCost < 0) {
+                partCostError.textContent = "Please enter a valid part cost.";
+                document.getElementById("results").classList.remove("show");
                 return;
             }
 
-            // Tiered markup - different for Phone/Tablet vs others
             let markup;
+
             if (deviceType === "Phone" || deviceType === "Tablet") {
-                if (partCost < 50) markup = 3.25;
-                else if (partCost <= 100) markup = 2.0;
-                else markup = 1.50;
+                if (partCost < 50) markup = 3.75;
+                else if (partCost <= 100) markup = 2.50;
+                else markup = 2.0;
             } else {
-                // Other devices keep original markup
                 if (partCost < 50) markup = 4;
                 else if (partCost <= 100) markup = 2.75;
                 else markup = 2.25;
             }
 
-            let serviceCost = partCost * markup;
-            const minimum = deviceMinimums[deviceType] || 100;
-            serviceCost = Math.max(serviceCost, minimum);
-            
-            // Round to nearest 9.99
-            serviceCost = roundToNearestNine99(serviceCost);
+            let laborCost = partCost * markup;
+            const deviceMinimum = deviceMinimums[deviceType];
+            laborCost = Math.max(laborCost, deviceMinimum);
 
-            // Calculate add-ons
-            let addonsTotal = 0;
-            const prices = addOnPrices[deviceType];
+            let addOnsCost = 0;
+            document.querySelectorAll('input[name="addons"]:checked').forEach(checkbox => {
+                const addOnId = checkbox.id;
+                const price = addOnPrices[addOnId];
 
-            if (document.getElementById("cleaning").checked) {
-                addonsTotal += prices.cleaning;
-            }
-            if (document.getElementById("liquidCleaning").checked && prices.liquidCleaning !== null) {
-                addonsTotal += prices.liquidCleaning;
-            }
-            if (document.getElementById("dataTransfer").checked) {
-                addonsTotal += prices.dataTransfer;
-            }
-            if (document.getElementById("protectiveScreen").checked && prices.protectiveScreen !== null) {
-                addonsTotal += prices.protectiveScreen;
-            }
-            if (document.getElementById("software").checked && prices.software !== null) {
-                addonsTotal += prices.software;
-            }
-            if (document.getElementById("expeditedRepair").checked && prices.expeditedRepair !== null) {
-                addonsTotal += prices.expeditedRepair;
-            }
+                if (typeof price === "object") {
+                    addOnsCost += price.min;
+                } else {
+                    addOnsCost += price;
+                }
+            });
 
-            const totalQuote = serviceCost + addonsTotal;
+            const totalQuote = laborCost + addOnsCost;
+            const finalQuote = roundToNearestNine99(totalQuote);
 
-            document.getElementById("serviceCost").textContent = "$" + serviceCost.toFixed(2);
-            document.getElementById("addonsTotal").textContent = "$" + addonsTotal.toFixed(2);
-            document.getElementById("totalQuote").textContent = "$" + totalQuote.toFixed(2);
+            document.getElementById("laborCost").textContent = "$" + laborCost.toFixed(2);
+            document.getElementById("addOnsCost").textContent = "$" + addOnsCost.toFixed(2);
+            document.getElementById("totalQuote").textContent = "$" + finalQuote.toFixed(2);
             document.getElementById("results").classList.add("show");
         }
+
+        document.getElementById("deviceType").addEventListener("change", updateAddOnAvailability);
+        document.getElementById("pricingForm").addEventListener("submit", calculateQuote);
     </script>
 </body>
 </html>
