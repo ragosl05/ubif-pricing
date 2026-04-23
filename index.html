@@ -170,11 +170,18 @@
                 return;
             }
 
-            // Updated tiered markup
+            // Tiered markup - different for Phone/Tablet vs others
             let markup;
-            if (partCost < 50) markup = 4;
-            else if (partCost <= 100) markup = 2.75;
-            else markup = 2.25;
+            if (deviceType === "Phone" || deviceType === "Tablet") {
+                if (partCost < 50) markup = 2.25;
+                else if (partCost <= 100) markup = 2.0;
+                else markup = 1.50;
+            } else {
+                // Other devices keep original markup
+                if (partCost < 50) markup = 4;
+                else if (partCost <= 100) markup = 2.75;
+                else markup = 2.25;
+            }
 
             let serviceCost = partCost * markup;
             const minimum = deviceMinimums[deviceType] || 100;
