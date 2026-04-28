@@ -15,34 +15,35 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
 
-        .banner {
-            background-color: #ff6b35;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
         .container {
-            max-width: 600px;
-            margin: 0 auto;
             background: white;
-            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
+        .header {
             text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
             font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
         }
 
         .form-group {
@@ -52,199 +53,295 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: #333;
             font-weight: 600;
             font-size: 14px;
         }
 
-        input, select {
+        select,
+        input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 14px;
             transition: border-color 0.3s;
         }
 
-        input:focus, select:focus {
+        select:focus,
+        input[type="number"]:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .add-on-section {
-            background: #f8f9fa;
+        .addons-container {
+            background: #f9f9f9;
             padding: 20px;
             border-radius: 8px;
-            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
         }
 
-        .add-on-section h3 {
-            color: #333;
+        .addon-group {
             margin-bottom: 15px;
-            font-size: 16px;
         }
 
-        .add-on-item {
+        .addon-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .addon-label {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
-            opacity: 1;
-            transition: opacity 0.3s;
+            cursor: pointer;
+            color: #333;
+            font-size: 14px;
         }
 
-        .add-on-item.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .add-on-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
             margin-right: 10px;
             cursor: pointer;
+            accent-color: #667eea;
         }
 
-        .add-on-item label {
-            margin: 0;
-            cursor: pointer;
-            font-weight: 500;
-            color: #333;
+        .addon-price {
+            color: #667eea;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
         }
 
         button {
-            width: 100%;
+            flex: 1;
             padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #calculateBtn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        button:hover {
+        #calculateBtn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
 
-        button:active {
+        #calculateBtn:active {
             transform: translateY(0);
         }
 
+        #resetBtn {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        #resetBtn:hover {
+            background: #e0e0e0;
+        }
+
         .results {
-            margin-top: 30px;
+            background: #f0f7ff;
             padding: 20px;
-            background: #f0f4ff;
+            border-radius: 8px;
             border-left: 4px solid #667eea;
-            border-radius: 6px;
-            display: none;
+            margin-top: 30px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .results.show {
-            display: block;
+            opacity: 1;
+            max-height: 500px;
         }
 
         .result-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            color: #333;
+            margin-bottom: 15px;
             font-size: 14px;
         }
 
-        .result-row.total {
-            border-top: 2px solid #667eea;
-            padding-top: 12px;
-            margin-top: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #667eea;
+        .result-row:last-child {
+            margin-bottom: 0;
         }
 
-        .error {
-            color: #d32f2f;
-            font-size: 13px;
-            margin-top: 5px;
+        .result-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .result-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .result-row.total {
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .result-row.total .result-label {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .result-row.total .result-value {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .button-container {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="banner">
-        🎉 10% ATC Member Discount Available - Ask Us How!
-    </div>
-
     <div class="container">
-        <h1>uBreakiFix Pricing Calculator</h1>
+        <div class="header">
+            <h1>💰 uBreakiFix Pricing Calculator</h1>
+            <p>Quick quote generator for repair services</p>
+        </div>
 
-        <form id="pricingForm">
+        <form id="quoteForm">
+            <!-- Device Type Selection -->
             <div class="form-group">
-                <label for="deviceType">Device Type</label>
+                <label for="deviceType">Device Type *</label>
                 <select id="deviceType" required>
-                    <option value="">Select a device...</option>
-                    <option value="Phone">Phone</option>
-                    <option value="Tablet">Tablet</option>
-                    <option value="Laptop">Laptop</option>
-                    <option value="Desktop">Desktop</option>
-                    <option value="Console">Console</option>
+                    <option value="">-- Select a Device --</option>
+                    <option value="Phone">📱 Phone</option>
+                    <option value="Tablet">📱 Tablet</option>
+                    <option value="Laptop">💻 Laptop</option>
+                    <option value="Desktop">🖥️ Desktop</option>
+                    <option value="Console">🎮 Console</option>
                 </select>
             </div>
 
+            <!-- Part Cost Input -->
             <div class="form-group">
-                <label for="partCost">Part Cost ($)</label>
-                <input type="number" id="partCost" placeholder="Enter part cost" step="0.01" min="0" required>
-                <div class="error" id="partCostError"></div>
+                <label for="partCost">Part Cost ($) *</label>
+                <input type="number" id="partCost" placeholder="Enter part cost" min="0" step="0.01" required>
+                <span class="error-message" id="partCostError"></span>
             </div>
 
-            <div class="add-on-section">
-                <h3>Add-On Services</h3>
-                <div class="add-on-item" id="basicCleaningItem">
-                    <input type="checkbox" id="basicCleaning" name="addons">
-                    <label for="basicCleaning">Basic Cleaning ($29.99–$119.99)</label>
-                </div>
-                <div class="add-on-item" id="liquidCleaningItem">
-                    <input type="checkbox" id="liquidCleaning" name="addons">
-                    <label for="liquidCleaning">Liquid Cleaning ($149.99–$199.99)</label>
-                </div>
-                <div class="add-on-item" id="dataTransferItem">
-                    <input type="checkbox" id="dataTransfer" name="addons">
-                    <label for="dataTransfer">Data Transfer ($149.99)</label>
-                </div>
-                <div class="add-on-item" id="protectiveScreenItem">
-                    <input type="checkbox" id="protectiveScreen" name="addons">
-                    <label for="protectiveScreen">Protective Screen ($29.99–$39.99)</label>
-                </div>
-                <div class="add-on-item" id="softwareItem">
-                    <input type="checkbox" id="software" name="addons">
-                    <label for="software">Software ($149.99)</label>
-                </div>
-                <div class="add-on-item" id="expeditedRepairItem">
-                    <input type="checkbox" id="expeditedRepair" name="addons">
-                    <label for="expeditedRepair">Expedited Repair ($49.99)</label>
+            <!-- Add-On Services -->
+            <div class="form-group">
+                <label>Add-On Services (Optional)</label>
+                <div class="addons-container">
+                    <!-- Cleaning Services -->
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="basicCleaning" value="basicCleaning">
+                            <span>Basic Cleaning</span>
+                            <span class="addon-price">$29.99</span>
+                        </label>
+                    </div>
+
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="liquidCleaning" value="liquidCleaning">
+                            <span>Liquid Cleaning</span>
+                            <span class="addon-price">$149.99</span>
+                        </label>
+                    </div>
+
+                    <!-- Data Transfer -->
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="dataTransfer" value="dataTransfer">
+                            <span>Data Transfer</span>
+                            <span class="addon-price">$149.99</span>
+                        </label>
+                    </div>
+
+                    <!-- Screen Protector -->
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="screenProtector" value="screenProtector">
+                            <span>Screen Protector</span>
+                            <span class="addon-price">$29.99</span>
+                        </label>
+                    </div>
+
+                    <!-- Software Service -->
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="software" value="software">
+                            <span>Software Service</span>
+                            <span class="addon-price">$149.99</span>
+                        </label>
+                    </div>
+
+                    <!-- Expedited Repair -->
+                    <div class="addon-group">
+                        <label class="addon-label">
+                            <input type="checkbox" name="addons" id="expedited" value="expedited">
+                            <span>Expedited Repair</span>
+                            <span class="addon-price">$49.99</span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <button type="submit">Calculate Quote</button>
+            <!-- Buttons -->
+            <div class="button-container">
+                <button type="submit" id="calculateBtn">Calculate Quote</button>
+                <button type="reset" id="resetBtn">Reset</button>
+            </div>
         </form>
 
+        <!-- Results -->
         <div class="results" id="results">
             <div class="result-row">
-                <span>Labor Cost:</span>
-                <span id="laborCost">$0.00</span>
+                <span class="result-label">Labor Cost:</span>
+                <span class="result-value" id="laborCost">$0.00</span>
             </div>
             <div class="result-row">
-                <span>Add-On Services:</span>
-                <span id="addOnsCost">$0.00</span>
+                <span class="result-label">Add-Ons Cost:</span>
+                <span class="result-value" id="addOnsCost">$0.00</span>
             </div>
             <div class="result-row total">
-                <span>Total Quote:</span>
-                <span id="totalQuote">$0.00</span>
+                <span class="result-label">Total Quote:</span>
+                <span class="result-value" id="totalQuote">$0.00</span>
             </div>
         </div>
     </div>
 
     <script>
+        // Device Minimum Labor Charges
         const deviceMinimums = {
             "Phone": 100,
             "Tablet": 100,
@@ -253,53 +350,26 @@
             "Console": 110
         };
 
+        // Add-On Prices
         const addOnPrices = {
-            "basicCleaning": { min: 29.99, max: 119.99 },
-            "liquidCleaning": { min: 149.99, max: 199.99 },
+            "basicCleaning": 29.99,
+            "liquidCleaning": 149.99,
             "dataTransfer": 149.99,
-            "protectiveScreen": { min: 29.99, max: 39.99 },
+            "screenProtector": 29.99,
             "software": 149.99,
-            "expeditedRepair": 49.99
+            "expedited": 49.99
         };
 
-        const addOnAvailability = {
-            "Phone": ["basicCleaning", "liquidCleaning", "dataTransfer", "protectiveScreen", "software", "expeditedRepair"],
-            "Tablet": ["basicCleaning", "liquidCleaning", "dataTransfer", "protectiveScreen", "software", "expeditedRepair"],
-            "Laptop": ["basicCleaning", "liquidCleaning", "dataTransfer", "software", "expeditedRepair"],
-            "Desktop": ["basicCleaning", "software", "expeditedRepair"],
-            "Console": ["basicCleaning", "expeditedRepair"]
-        };
-
-        function roundToNearestNine99(value) {
-            const remainder = value % 1;
-            const base = Math.floor(value);
-
-            if (remainder < 0.5) {
-                return base + 0.99;
-            } else if (remainder < 0.99) {
-                return base + 0.99;
-            } else {
-                return base + 1 + 0.99;
+        // Round to nearest .99
+        function roundToNearestNine99(amount) {
+            const rounded = Math.round(amount);
+            if (rounded === amount) {
+                return rounded + 0.99;
             }
+            return rounded - 0.01;
         }
 
-        function updateAddOnAvailability() {
-            const deviceType = document.getElementById("deviceType").value;
-            const availableAddOns = addOnAvailability[deviceType] || [];
-
-            Object.keys(addOnPrices).forEach(addOnId => {
-                const item = document.getElementById(addOnId + "Item");
-                const checkbox = document.getElementById(addOnId);
-
-                if (availableAddOns.includes(addOnId)) {
-                    item.classList.remove("disabled");
-                } else {
-                    item.classList.add("disabled");
-                    checkbox.checked = false;
-                }
-            });
-        }
-
+        // Calculate Quote Function
         function calculateQuote(event) {
             event.preventDefault();
 
@@ -315,45 +385,64 @@
                 return;
             }
 
+            // Determine Markup Based on Device Type and Part Cost
             let markup;
 
             if (deviceType === "Phone" || deviceType === "Tablet") {
-                if (partCost < 50) markup = 3.75;
-                else if (partCost <= 100) markup = 2.50;
-                else markup = 2.0;
+                if (partCost < 50) {
+                    markup = 3.75;
+                } else if (partCost <= 100) {
+                    markup = 2.50;
+                } else if (partCost <= 300) {
+                    markup = 2.0;
+                } else {
+                    markup = 1.75; // $300+ tier
+                }
             } else {
-                if (partCost < 50) markup = 4;
-                else if (partCost <= 100) markup = 2.75;
-                else markup = 2.25;
+                // Laptop, Desktop, Console
+                if (partCost < 50) {
+                    markup = 4.0;
+                } else if (partCost <= 100) {
+                    markup = 2.75;
+                } else if (partCost <= 300) {
+                    markup = 2.25;
+                } else {
+                    markup = 1.75; // $300+ tier
+                }
             }
 
+            // Calculate Labor Cost
             let laborCost = partCost * markup;
             const deviceMinimum = deviceMinimums[deviceType];
             laborCost = Math.max(laborCost, deviceMinimum);
 
+            // Calculate Add-Ons Cost
             let addOnsCost = 0;
             document.querySelectorAll('input[name="addons"]:checked').forEach(checkbox => {
                 const addOnId = checkbox.id;
                 const price = addOnPrices[addOnId];
-
-                if (typeof price === "object") {
-                    addOnsCost += price.min;
-                } else {
-                    addOnsCost += price;
-                }
+                addOnsCost += price;
             });
 
+            // Calculate Total Quote
             const totalQuote = laborCost + addOnsCost;
             const finalQuote = roundToNearestNine99(totalQuote);
 
+            // Display Results
             document.getElementById("laborCost").textContent = "$" + laborCost.toFixed(2);
             document.getElementById("addOnsCost").textContent = "$" + addOnsCost.toFixed(2);
             document.getElementById("totalQuote").textContent = "$" + finalQuote.toFixed(2);
             document.getElementById("results").classList.add("show");
         }
 
-        document.getElementById("deviceType").addEventListener("change", updateAddOnAvailability);
-        document.getElementById("pricingForm").addEventListener("submit", calculateQuote);
+        // Form Submission
+        document.getElementById("quoteForm").addEventListener("submit", calculateQuote);
+
+        // Reset Form
+        document.getElementById("resetBtn").addEventListener("click", function() {
+            document.getElementById("results").classList.remove("show");
+            document.getElementById("partCostError").textContent = "";
+        });
     </script>
 </body>
 </html>
