@@ -21,6 +21,24 @@
             padding: 20px;
         }
 
+        .atc-banner {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            text-align: center;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .atc-banner span {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
         .container {
             background: white;
             border-radius: 12px;
@@ -226,10 +244,20 @@
             .button-container {
                 flex-direction: column;
             }
+
+            .atc-banner {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- ATC Banner -->
+    <div class="atc-banner">
+        <span>✓</span> AUTHORIZED REPAIR CENTER <span>✓</span>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>💰 uBreakiFix Pricing Calculator</h1>
@@ -326,7 +354,7 @@
         <!-- Results -->
         <div class="results" id="results">
             <div class="result-row">
-                <span class="result-label">Labor Cost:</span>
+                <span class="result-label">Repair Service Fee:</span>
                 <span class="result-value" id="laborCost">$0.00</span>
             </div>
             <div class="result-row">
