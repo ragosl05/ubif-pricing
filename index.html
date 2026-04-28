@@ -314,8 +314,6 @@
         };
 
         function roundToNearestNinetyNine(price) {
-            const cents = Math.round((price % 1) * 100);
-            if (cents === 99) return price;
             const base = Math.floor(price);
             return base + 0.99;
         }
@@ -372,10 +370,16 @@
             quotePrice.textContent = `$${result.totalQuote.toFixed(2)}`;
 
             let subtotalText = '';
-            if (result.addonTotal > 0) {
+            if (result.partCost > 0) {
                 const laborQuote = result.laborCost;
                 const laborRounded = roundToNearestNinetyNine(laborQuote);
-                subtotalText = `Labor + Part: $${laborRounded.toFixed(2)} | Add-ons: $${result.addonTotal.toFixed(2)}`;
+                const margin = laborRounded - result.partCost;
+                const markupPercent = result.partCost > 0 ? ((margin / result.partCost) * 100).toFixed(0) : 0;
+                subtotalText = `Part $${result.partCost.toFixed(2)} | Margin $${margin.toFixed(2)} (${markupPercent}% markup)`;
+                
+                if (result.addonTotal > 0) {
+                    subtotalText += ` + Add-ons $${result.addonTotal.toFixed(2)}`;
+                }
             }
             quoteSubtotal.textContent = subtotalText;
 
@@ -414,4 +418,5 @@
     </script>
 </body>
 </html>
+
 
