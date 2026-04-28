@@ -33,11 +33,24 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            max-width: 320px;
+            height: auto;
+            display: inline-block;
+            object-fit: contain;
         }
 
         .header h1 {
             color: #333;
-            font-size: 28px;
+            font-size: 24px;
             margin-bottom: 5px;
         }
 
@@ -220,7 +233,11 @@
             }
 
             .header h1 {
-                font-size: 24px;
+                font-size: 20px;
+            }
+
+            .logo-container img {
+                max-width: 250px;
             }
 
             .button-container {
@@ -232,7 +249,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💰 uBreakiFix Pricing Calculator</h1>
+            <div class="logo-container">
+                <img src="https://www.ubreakifix.com/images/logo.png" alt="uBreakiFix by asurion">
+            </div>
+            <h1>Pricing Calculator</h1>
             <p>Quick quote generator for repair services</p>
         </div>
 
