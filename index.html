@@ -407,16 +407,9 @@
 
             breakdown.innerHTML = breakdownHTML;
         }
-
-        document.getElementById('device').addEventListener('change', generateQuote);
-        document.getElementById('partCost').addEventListener('input', generateQuote);
-        document.querySelectorAll('.addon-item input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', generateQuote);
-        });
-
-        generateQuote();
     </script>
 </body>
 </html>
+
 
 
