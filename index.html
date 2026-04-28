@@ -38,20 +38,51 @@
         }
 
         .logo-container {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .logo-container img {
-            max-width: 320px;
-            height: auto;
-            display: inline-block;
-            object-fit: contain;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .logo-text .main {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1;
+        }
+
+        .logo-text .sub {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .header h1 {
             color: #333;
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .header p {
@@ -233,11 +264,17 @@
             }
 
             .header h1 {
+                font-size: 24px;
+            }
+
+            .logo-icon {
+                width: 35px;
+                height: 35px;
                 font-size: 20px;
             }
 
-            .logo-container img {
-                max-width: 250px;
+            .logo-text .main {
+                font-size: 18px;
             }
 
             .button-container {
@@ -250,7 +287,11 @@
     <div class="container">
         <div class="header">
             <div class="logo-container">
-                <img src="https://www.ubreakifix.com/images/logo.png" alt="uBreakiFix by asurion">
+                <div class="logo-icon">⚙️</div>
+                <div class="logo-text">
+                    <div class="main">uBreakiFix</div>
+                    <div class="sub">by asurion</div>
+                </div>
             </div>
             <h1>Pricing Calculator</h1>
             <p>Quick quote generator for repair services</p>
@@ -497,6 +538,7 @@
     </script>
 </body>
 </html>
+
 
 
 
