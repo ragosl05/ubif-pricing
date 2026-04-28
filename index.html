@@ -414,11 +414,34 @@
             // Calculate Labor Cost
             let laborCost = partCost * markup;
 
-            // ✅ NEW: Apply Minimum Labor Floor at $300+ Threshold
-            if (partCost >= 300) {
-                const floorMarkup = deviceType === "Phone" || deviceType === "Tablet" ? 2.0 : 2.25;
-                const laborFloor = 300 * floorMarkup;
-                laborCost = Math.max(laborCost, laborFloor);
+            // ✅ Apply Minimum Labor Floors at ALL Tier Transitions
+            if (deviceType === "Phone" || deviceType === "Tablet") {
+                if (partCost >= 50) {
+                    const floorAt50 = 49.99 * 3.75;  // $187.46
+                    laborCost = Math.max(laborCost, floorAt50);
+                }
+                if (partCost >= 100) {
+                    const floorAt100 = 100 * 2.50;   // $250.00
+                    laborCost = Math.max(laborCost, floorAt100);
+                }
+                if (partCost >= 300) {
+                    const floorAt300 = 300 * 2.0;    // $600.00
+                    laborCost = Math.max(laborCost, floorAt300);
+                }
+            } else {
+                // Laptop, Desktop, Console
+                if (partCost >= 50) {
+                    const floorAt50 = 49.99 * 4.0;   // $199.96
+                    laborCost = Math.max(laborCost, floorAt50);
+                }
+                if (partCost >= 100) {
+                    const floorAt100 = 100 * 2.75;   // $275.00
+                    laborCost = Math.max(laborCost, floorAt100);
+                }
+                if (partCost >= 300) {
+                    const floorAt300 = 300 * 2.25;   // $675.00
+                    laborCost = Math.max(laborCost, floorAt300);
+                }
             }
 
             const deviceMinimum = deviceMinimums[deviceType];
@@ -454,5 +477,6 @@
     </script>
 </body>
 </html>
+
 
 
