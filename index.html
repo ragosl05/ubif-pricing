@@ -284,7 +284,8 @@
             <label for="device-type">Device Type</label>
             <select id="device-type" required>
                 <option value="">Select device type...</option>
-                <option value="phone">Phone / Tablet</option>
+                <option value="phone">Phone</option>
+                <option value="tablet">Tablet</option>
                 <option value="laptop">Laptop / Desktop</option>
                 <option value="console">Console</option>
             </select>
@@ -549,6 +550,7 @@
     <script>
         const baseLaborRates = {
             phone: 100,
+            tablet: 100,
             laptop: 150,
             console: 125
         };
@@ -603,15 +605,10 @@
             document.getElementById('breakdown-addons').textContent = '$0.00';
             document.getElementById('breakdown-margin').textContent = '$0.00';
         }
-
-        document.getElementById('device-type').addEventListener('change', calculateQuote);
-        document.getElementById('part-cost').addEventListener('input', calculateQuote);
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('change', calculateQuote);
-        });
     </script>
 </body>
 </html>
+
 
 
 
