@@ -161,8 +161,8 @@
         </div>
 
         <div class="form-group">
-            <label for="device">Device Type</label>
-            <select id="device">
+            <label for="deviceType">Device Type</label>
+            <select id="deviceType">
                 <option value="">Select a device...</option>
                 <option value="phone">Phone</option>
                 <option value="tablet">Tablet</option>
@@ -177,10 +177,7 @@
             <input type="number" id="partCost" placeholder="0.00" step="0.01" min="0">
         </div>
 
-        <div class="add-ons" id="addOnsContainer" style="display: none;">
-            <label style="margin-bottom: 12px; display: block;">Add-ons</label>
-            <div id="addOnsList"></div>
-        </div>
+        <div class="add-ons" id="addOns" style="display: none;"></div>
 
         <div class="quote-section">
             <div class="quote-label">Total Quote</div>
@@ -194,130 +191,130 @@
         const pricingConfig = {
             phone: {
                 baseLabor: 100,
+                markups: [
+                    { threshold: 50, multiplier: 1.50 },
+                    { threshold: 100, multiplier: 1.40 },
+                    { threshold: 300, multiplier: 1.30 },
+                    { threshold: Infinity, multiplier: 1.25 }
+                ],
                 addOns: [
-                    { name: 'Screen Protector', price: 15.00 },
-                    { name: 'Case', price: 25.00 },
-                    { name: 'Data Transfer', price: 30.00 }
+                    { name: 'Basic Cleaning', price: 29.99 },
+                    { name: 'Liquid Cleaning', price: 149.99 },
+                    { name: 'Data Transfer', price: 149.99 }
                 ]
             },
             tablet: {
                 baseLabor: 100,
+                markups: [
+                    { threshold: 50, multiplier: 1.50 },
+                    { threshold: 100, multiplier: 1.40 },
+                    { threshold: 300, multiplier: 1.30 },
+                    { threshold: Infinity, multiplier: 1.25 }
+                ],
                 addOns: [
-                    { name: 'Screen Protector', price: 20.00 },
-                    { name: 'Case', price: 35.00 }
+                    { name: 'Basic Cleaning', price: 29.99 },
+                    { name: 'Liquid Cleaning', price: 149.99 },
+                    { name: 'Data Transfer', price: 149.99 }
                 ]
             },
             laptop: {
                 baseLabor: 150,
+                markups: [
+                    { threshold: 50, multiplier: 1.50 },
+                    { threshold: 100, multiplier: 1.40 },
+                    { threshold: 300, multiplier: 1.30 },
+                    { threshold: Infinity, multiplier: 1.25 }
+                ],
                 addOns: [
-                    { name: 'Software Installation', price: 50.00 },
-                    { name: 'Data Recovery', price: 100.00 }
+                    { name: 'Basic Cleaning', price: 99.99 },
+                    { name: 'Liquid Cleaning', price: 199.99 },
+                    { name: 'Data Transfer', price: 149.99 },
+                    { name: 'Expedited Repair', price: 49.99 }
                 ]
             },
             desktop: {
                 baseLabor: 150,
+                markups: [
+                    { threshold: 50, multiplier: 1.50 },
+                    { threshold: 100, multiplier: 1.40 },
+                    { threshold: 300, multiplier: 1.30 },
+                    { threshold: Infinity, multiplier: 1.25 }
+                ],
                 addOns: [
-                    { name: 'Setup & Configuration', price: 60.00 },
-                    { name: 'Data Recovery', price: 100.00 }
+                    { name: 'Basic Cleaning', price: 99.99 },
+                    { name: 'Liquid Cleaning', price: 199.99 },
+                    { name: 'Data Transfer', price: 149.99 },
+                    { name: 'Expedited Repair', price: 49.99 }
                 ]
             },
             console: {
                 baseLabor: 125,
+                markups: [
+                    { threshold: 50, multiplier: 1.50 },
+                    { threshold: 100, multiplier: 1.40 },
+                    { threshold: 300, multiplier: 1.30 },
+                    { threshold: Infinity, multiplier: 1.25 }
+                ],
                 addOns: [
-                    { name: 'Controller Pair', price: 80.00 },
-                    { name: 'Extended Warranty', price: 40.00 }
+                    { name: 'Basic Cleaning', price: 99.99 },
+                    { name: 'Liquid Cleaning', price: 199.99 },
+                    { name: 'Data Transfer', price: 149.99 },
+                    { name: 'Expedited Repair', price: 49.99 }
                 ]
             }
         };
 
-        const deviceSelect = document.getElementById('device');
-        const partCostInput = document.getElementById('partCost');
-        const quoteDisplay = document.getElementById('quote');
-        const addOnsContainer = document.getElementById('addOnsContainer');
-        const addOnsList = document.getElementById('addOnsList');
-
-        function getMultiplier(partCost) {
-            if (partCost <= 50) return 1.50;
-            if (partCost <= 100) return 1.40;
-            if (partCost <= 300) return 1.30;
-            return 1.25;
-        }
-
         function calculateQuote() {
-            const device = deviceSelect.value;
-            const partCost = parseFloat(partCostInput.value) || 0;
+            const deviceType = document.getElementById('deviceType').value;
+            const partCost = parseFloat(document.getElementById('partCost').value) || 0;
+            const selectedAddOns = Array.from(document.querySelectorAll('input[name="addOn"]:checked'))
+                .map(checkbox => parseFloat(checkbox.value));
 
-            if (!device) {
-                quoteDisplay.textContent = '$0.00';
+            if (!deviceType) {
+                document.getElementById('quote').textContent = '$0.00';
                 return;
             }
 
-            const config = pricingConfig[device];
-            const baseLabor = config.baseLabor;
-            const multiplier = getMultiplier(partCost);
+            const config = pricingConfig[deviceType];
+            const applicableMarkup = config.markups.find(m => partCost <= m.threshold);
+            const multiplier = applicableMarkup.multiplier;
 
             // Margin-only calculation
-            const margin = (baseLabor + partCost) * multiplier;
+            const margin = (config.baseLabor + partCost) * multiplier;
+            const roundedMargin = Math.floor(margin) + 0.99;
 
-            // Get selected add-ons
-            const addOns = Array.from(addOnsList.querySelectorAll('input[type="checkbox"]:checked'))
-                .reduce((sum, checkbox) => sum + parseFloat(checkbox.dataset.price), 0);
+            const addOnTotal = selectedAddOns.reduce((sum, price) => sum + price, 0);
+            const finalTotal = roundedMargin + addOnTotal;
 
-            // Total = margin + add-ons
-            const total = margin + addOns;
-
-            // Round to nearest .99
-            const rounded = Math.floor(total) + 0.99;
-
-            quoteDisplay.textContent = '$' + rounded.toFixed(2);
+            document.getElementById('quote').textContent = '$' + finalTotal.toFixed(2);
         }
 
-        function populateAddOns(device) {
-            addOnsList.innerHTML = '';
-            const config = pricingConfig[device];
+        function updateAddOns() {
+            const deviceType = document.getElementById('deviceType').value;
+            const addOnContainer = document.getElementById('addOns');
 
-            if (!config || config.addOns.length === 0) {
-                addOnsContainer.style.display = 'none';
+            if (!deviceType) {
+                addOnContainer.style.display = 'none';
                 return;
             }
 
-            addOnsContainer.style.display = 'block';
-
-            config.addOns.forEach((addOn, index) => {
-                const div = document.createElement('div');
-                div.className = 'add-on-item';
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = `addon-${index}`;
-                checkbox.dataset.price = addOn.price;
-                checkbox.addEventListener('change', calculateQuote);
-
-                const label = document.createElement('label');
-                label.htmlFor = `addon-${index}`;
-                label.textContent = addOn.name;
-
-                const price = document.createElement('span');
-                price.className = 'add-on-price';
-                price.textContent = '+$' + addOn.price.toFixed(2);
-
-                div.appendChild(checkbox);
-                div.appendChild(label);
-                div.appendChild(price);
-                addOnsList.appendChild(div);
-            });
-
-            calculateQuote();
+            const config = pricingConfig[deviceType];
+            addOnContainer.style.display = 'block';
+            addOnContainer.innerHTML = config.addOns.map((addOn, index) =>
+                `<div class="add-on-item">
+                    <input type="checkbox" id="addon-${index}" name="addOn" value="${addOn.price}" onchange="calculateQuote()">
+                    <label for="addon-${index}">${addOn.name}</label>
+                    <span class="add-on-price">+$${addOn.price.toFixed(2)}</span>
+                </div>`
+            ).join('');
         }
 
-        deviceSelect.addEventListener('change', () => {
-            populateAddOns(deviceSelect.value);
-        });
-
-        partCostInput.addEventListener('input', calculateQuote);
+        document.getElementById('deviceType').addEventListener('change', updateAddOns);
+        document.getElementById('partCost').addEventListener('input', calculateQuote);
     </script>
 </body>
 </html>
+
 
 
 
