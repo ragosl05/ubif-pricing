@@ -208,7 +208,7 @@
 
         <div class="form-group">
             <label for="device">Device Type</label>
-            <select id="device">
+            <select id="device" onchange="updateAddons()">
                 <option value="phone">Phone</option>
                 <option value="tablet">Tablet</option>
                 <option value="laptop">Laptop</option>
@@ -225,26 +225,7 @@
 
         <div class="addons-section">
             <h3>Add-On Services</h3>
-            <div class="addon-item">
-                <input type="checkbox" id="diagnostics" value="diagnostics">
-                <label for="diagnostics">Diagnostics</label>
-                <span class="addon-price">+$29.99</span>
-            </div>
-            <div class="addon-item">
-                <input type="checkbox" id="dataRecovery" value="dataRecovery">
-                <label for="dataRecovery">Data Recovery</label>
-                <span class="addon-price">+$49.99</span>
-            </div>
-            <div class="addon-item">
-                <input type="checkbox" id="extendedWarranty" value="extendedWarranty">
-                <label for="extendedWarranty">Extended Warranty</label>
-                <span class="addon-price">+$79.99</span>
-            </div>
-            <div class="addon-item">
-                <input type="checkbox" id="premiumSupport" value="premiumSupport">
-                <label for="premiumSupport">Premium Support</label>
-                <span class="addon-price">+$149.99</span>
-            </div>
+            <div id="addonsContainer"></div>
         </div>
 
         <div class="quote-display">
@@ -306,16 +287,56 @@
             }
         };
 
-        const addonPrices = {
-            diagnostics: 29.99,
-            dataRecovery: 49.99,
-            extendedWarranty: 79.99,
-            premiumSupport: 149.99
+        const addonConfig = {
+            phone: [
+                { id: 'basicCleaning', label: 'Basic Cleaning', price: 29.99 },
+                { id: 'liquidCleaning', label: 'Liquid Cleaning', price: 149.99 },
+                { id: 'dataTransfer', label: 'Data Transfer', price: 149.99 }
+            ],
+            tablet: [
+                { id: 'basicCleaning', label: 'Basic Cleaning', price: 29.99 },
+                { id: 'liquidCleaning', label: 'Liquid Cleaning', price: 149.99 },
+                { id: 'dataTransfer', label: 'Data Transfer', price: 149.99 }
+            ],
+            laptop: [
+                { id: 'basicCleaning', label: 'Basic Cleaning', price: 99.99 },
+                { id: 'liquidCleaning', label: 'Liquid Cleaning', price: 199.99 },
+                { id: 'dataTransfer', label: 'Data Transfer', price: 149.99 }
+            ],
+            desktop: [
+                { id: 'basicCleaning', label: 'Basic Cleaning', price: 99.99 },
+                { id: 'liquidCleaning', label: 'Liquid Cleaning', price: 199.99 },
+                { id: 'dataTransfer', label: 'Data Transfer', price: 149.99 }
+            ],
+            console: [
+                { id: 'basicCleaning', label: 'Basic Cleaning', price: 99.99 },
+                { id: 'liquidCleaning', label: 'Liquid Cleaning', price: 199.99 },
+                { id: 'dataTransfer', label: 'Data Transfer', price: 149.99 }
+            ]
         };
+
+        function updateAddons() {
+            const deviceType = document.getElementById('device').value;
+            const addonsContainer = document.getElementById('addonsContainer');
+            const addons = addonConfig[deviceType];
+
+            addonsContainer.innerHTML = addons.map(addon => `
+                <div class="addon-item">
+                    <input type="checkbox" id="${addon.id}" value="${addon.id}">
+                    <label for="${addon.id}">${addon.label}</label>
+                    <span class="addon-price">+$${addon.price.toFixed(2)}</span>
+                </div>
+            `).join('');
+        }
 
         function roundToNearestNinetyNine(price) {
             const base = Math.floor(price);
             return base + 0.99;
+        }
+
+        function getAddonPrice(deviceType, addonId) {
+            const addon = addonConfig[deviceType].find(a => a.id === addonId);
+            return addon ? addon.price : 0;
         }
 
         function calculateQuote() {
@@ -337,12 +358,12 @@
             const laborCost = (config.baseLabor + partCost) * multiplier;
             let totalQuote = laborCost;
 
-            const selectedAddons = Array.from(document.querySelectorAll('.addon-item input[type="checkbox"]:checked'))
+            const selectedAddons = Array.from(document.querySelectorAll('#addonsContainer input[type="checkbox"]:checked'))
                 .map(checkbox => checkbox.value);
 
             let addonTotal = 0;
-            selectedAddons.forEach(addon => {
-                addonTotal += addonPrices[addon];
+            selectedAddons.forEach(addonId => {
+                addonTotal += getAddonPrice(deviceType, addonId);
             });
 
             totalQuote += addonTotal;
@@ -407,9 +428,13 @@
 
             breakdown.innerHTML = breakdownHTML;
         }
+
+        // Initialize add-ons on page load
+        updateAddons();
     </script>
 </body>
 </html>
+
 
 
 
