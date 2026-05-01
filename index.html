@@ -221,13 +221,12 @@
             const applicableMarkup = config.markups.find(m => partCost <= m.threshold);
             const multiplier = applicableMarkup.multiplier;
 
-            const laborRounded = Math.round((config.baseLabor + partCost) * multiplier * 100) / 100;
-            const roundedQuote = Math.floor(laborRounded * 100 + 99) / 100;
+            const margin = Math.round((config.baseLabor + partCost) * multiplier * 100) / 100 - (config.baseLabor + partCost);
+            const roundedQuote = Math.floor(margin * 100 + 99) / 100;
 
             const addOnTotal = selectedAddOns.reduce((sum, price) => sum + price, 0);
             const finalTotal = Math.round((roundedQuote + addOnTotal) * 100) / 100;
 
-            const margin = laborRounded - partCost;
             const markupPercent = partCost > 0 ? ((margin / partCost) * 100).toFixed(0) : 0;
 
             document.getElementById('result').innerHTML = `
@@ -236,10 +235,10 @@
                     <p style="font-size: 14px; margin: 5px 0;">Base Labor: $${config.baseLabor.toFixed(2)}</p>
                     <p style="font-size: 14px; margin: 5px 0;">Part Cost: $${partCost.toFixed(2)}</p>
                     <p style="font-size: 14px; margin: 5px 0;">Multiplier: ${multiplier}x</p>
-                    <p style="font-size: 14px; margin: 5px 0;">Labor Quote: $${roundedQuote.toFixed(2)}</p>
+                    <p style="font-size: 14px; margin: 5px 0;">Margin: $${margin.toFixed(2)}</p>
                     <p style="font-size: 14px; margin: 5px 0;">Add-ons Total: $${addOnTotal.toFixed(2)}</p>
                     <p style="font-size: 18px; font-weight: bold; margin: 15px 0;">Final Quote: $${finalTotal.toFixed(2)}</p>
-                    <p style="font-size: 12px; margin: 10px 0; opacity: 0.9;">Margin: $${margin.toFixed(2)} (${markupPercent}%)</p>
+                    <p style="font-size: 12px; margin: 10px 0; opacity: 0.9;">Markup: ${markupPercent}%</p>
                 </div>
             `;
         }
