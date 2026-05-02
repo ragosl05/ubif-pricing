@@ -235,17 +235,17 @@
         <div class="add-ons-section">
             <div class="add-ons-title">Add-On Services</div>
             <div class="add-on">
-                <input type="checkbox" id="basic-cleaning" data-device-prices='{"phone":39.99,"tablet":39.99,"laptop":29.99,"console":129.99}'>
+                <input type="checkbox" id="basic-cleaning">
                 <label for="basic-cleaning">
                     <span class="add-on-name">Basic Cleaning</span>
-                    <span class="add-on-price" id="basic-cleaning-price">$29.99</span>
+                    <span class="add-on-price" id="basic-cleaning-price">$39.99</span>
                 </label>
             </div>
             <div class="add-on">
-                <input type="checkbox" id="liquid-cleaning" value="149.99">
+                <input type="checkbox" id="liquid-cleaning">
                 <label for="liquid-cleaning">
                     <span class="add-on-name">Liquid Cleaning</span>
-                    <span class="add-on-price">$149.99</span>
+                    <span class="add-on-price" id="liquid-cleaning-price">$149.99</span>
                 </label>
             </div>
             <div class="add-on">
@@ -304,8 +304,15 @@
         const basicCleaningPrices = {
             phone: 39.99,
             tablet: 39.99,
-            laptop: 29.99,
+            laptop: 129.99,
             console: 129.99
+        };
+
+        const liquidCleaningPrices = {
+            phone: 149.99,
+            tablet: 149.99,
+            laptop: 199.99,
+            console: 199.99
         };
 
         function getMultiplier(partCost) {
@@ -316,18 +323,25 @@
             return 1.300;
         }
 
-        function updateBasicCleaningPrice() {
+        function updateAddOnPrices() {
             const deviceType = document.getElementById('device-type').value;
             const basicCleaningPriceSpan = document.getElementById('basic-cleaning-price');
+            const liquidCleaningPriceSpan = document.getElementById('liquid-cleaning-price');
             
             if (deviceType && basicCleaningPrices[deviceType]) {
                 basicCleaningPriceSpan.textContent = '$' + basicCleaningPrices[deviceType].toFixed(2);
             } else {
-                basicCleaningPriceSpan.textContent = '$29.99';
+                basicCleaningPriceSpan.textContent = '$39.99';
+            }
+
+            if (deviceType && liquidCleaningPrices[deviceType]) {
+                liquidCleaningPriceSpan.textContent = '$' + liquidCleaningPrices[deviceType].toFixed(2);
+            } else {
+                liquidCleaningPriceSpan.textContent = '$149.99';
             }
         }
 
-        document.getElementById('device-type').addEventListener('change', updateBasicCleaningPrice);
+        document.getElementById('device-type').addEventListener('change', updateAddOnPrices);
 
         function calculateQuote() {
             const deviceType = document.getElementById('device-type').value;
@@ -349,8 +363,13 @@
                 addOnTotal += basicCleaningPrices[deviceType];
             }
             
+            // Liquid Cleaning (device-specific pricing)
+            if (document.getElementById('liquid-cleaning').checked) {
+                addOnTotal += liquidCleaningPrices[deviceType];
+            }
+            
             // Other add-ons (fixed pricing)
-            const otherAddOns = ['liquid-cleaning', 'data-transfer', 'expedited-repair'];
+            const otherAddOns = ['data-transfer', 'expedited-repair'];
             otherAddOns.forEach(addOnId => {
                 const checkbox = document.getElementById(addOnId);
                 if (checkbox.checked) {
@@ -377,13 +396,12 @@
             document.getElementById('breakdown-part').textContent = '$0.00';
             document.getElementById('breakdown-addons').textContent = '$0.00';
             document.getElementById('breakdown-margin').textContent = '$0.00';
-            document.getElementById('basic-cleaning-price').textContent = '$29.99';
+            document.getElementById('basic-cleaning-price').textContent = '$39.99';
+            document.getElementById('liquid-cleaning-price').textContent = '$149.99';
         }
     </script>
 </body>
 </html>
-
-
 
 
 
