@@ -235,10 +235,10 @@
         <div class="add-ons-section">
             <div class="add-ons-title">Add-On Services</div>
             <div class="add-on">
-                <input type="checkbox" id="basic-cleaning" value="29.99">
+                <input type="checkbox" id="basic-cleaning" data-device-prices='{"phone":39.99,"tablet":39.99,"laptop":29.99,"console":129.99}'>
                 <label for="basic-cleaning">
                     <span class="add-on-name">Basic Cleaning</span>
-                    <span class="add-on-price">$29.99</span>
+                    <span class="add-on-price" id="basic-cleaning-price">$29.99</span>
                 </label>
             </div>
             <div class="add-on">
@@ -301,6 +301,13 @@
             console: 125
         };
 
+        const basicCleaningPrices = {
+            phone: 39.99,
+            tablet: 39.99,
+            laptop: 29.99,
+            console: 129.99
+        };
+
         function getMultiplier(partCost) {
             if (partCost < 50) return 1.40;
             if (partCost < 100) return 1.40 - ((partCost - 50) / 50) * 0.05;
@@ -308,6 +315,19 @@
             if (partCost < 5000) return 1.228 + ((partCost - 1000) / 4000) * 0.072;
             return 1.300;
         }
+
+        function updateBasicCleaningPrice() {
+            const deviceType = document.getElementById('device-type').value;
+            const basicCleaningPriceSpan = document.getElementById('basic-cleaning-price');
+            
+            if (deviceType && basicCleaningPrices[deviceType]) {
+                basicCleaningPriceSpan.textContent = '$' + basicCleaningPrices[deviceType].toFixed(2);
+            } else {
+                basicCleaningPriceSpan.textContent = '$29.99';
+            }
+        }
+
+        document.getElementById('device-type').addEventListener('change', updateBasicCleaningPrice);
 
         function calculateQuote() {
             const deviceType = document.getElementById('device-type').value;
@@ -323,8 +343,15 @@
             const baseQuote = Math.floor((baseLabor + partCost) * multiplier) + 0.99;
 
             let addOnTotal = 0;
-            const addOns = ['basic-cleaning', 'liquid-cleaning', 'data-transfer', 'expedited-repair'];
-            addOns.forEach(addOnId => {
+            
+            // Basic Cleaning (device-specific pricing)
+            if (document.getElementById('basic-cleaning').checked) {
+                addOnTotal += basicCleaningPrices[deviceType];
+            }
+            
+            // Other add-ons (fixed pricing)
+            const otherAddOns = ['liquid-cleaning', 'data-transfer', 'expedited-repair'];
+            otherAddOns.forEach(addOnId => {
                 const checkbox = document.getElementById(addOnId);
                 if (checkbox.checked) {
                     addOnTotal += parseFloat(checkbox.value);
@@ -350,13 +377,11 @@
             document.getElementById('breakdown-part').textContent = '$0.00';
             document.getElementById('breakdown-addons').textContent = '$0.00';
             document.getElementById('breakdown-margin').textContent = '$0.00';
+            document.getElementById('basic-cleaning-price').textContent = '$29.99';
         }
     </script>
 </body>
 </html>
-
-
-
 
 
 
