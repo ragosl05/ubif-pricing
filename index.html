@@ -194,62 +194,6 @@
             background: #e0e0e0;
         }
 
-        .pricing-tables {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid #ddd;
-        }
-
-        .pricing-tables h2 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .table-section {
-            margin-bottom: 30px;
-        }
-
-        .table-section h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        table th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        table tbody tr:hover {
-            background: #f9f9f9;
-        }
-
-        .price-highlight {
-            color: #667eea;
-            font-weight: 600;
-        }
-
         @media (max-width: 640px) {
             .calculator-wrapper {
                 padding: 25px;
@@ -261,14 +205,6 @@
 
             .quote-amount {
                 font-size: 36px;
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            table th, table td {
-                padding: 8px;
             }
         }
     </style>
@@ -355,196 +291,6 @@
             <button type="button" class="btn-clear" onclick="resetCalculator()">Clear</button>
             <button type="button" class="btn-calculate" onclick="calculateQuote()">Calculate</button>
         </div>
-
-        <div class="pricing-tables">
-            <h2>Pricing Reference</h2>
-
-            <div class="table-section">
-                <h3>Phone / Tablet (Base Labor: $100)</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Part Cost</th>
-                                <th>Multiplier</th>
-                                <th>Quote</th>
-                                <th>Margin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>$10</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$154.99</td>
-                                <td>$144.99</td>
-                            </tr>
-                            <tr>
-                                <td>$25</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$175.99</td>
-                                <td>$150.99</td>
-                            </tr>
-                            <tr>
-                                <td>$50</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$210.99</td>
-                                <td>$160.99</td>
-                            </tr>
-                            <tr>
-                                <td>$100</td>
-                                <td>1.3500x</td>
-                                <td class="price-highlight">$270.99</td>
-                                <td>$170.99</td>
-                            </tr>
-                            <tr>
-                                <td>$200</td>
-                                <td>1.3270x</td>
-                                <td class="price-highlight">$399.99</td>
-                                <td>$199.99</td>
-                            </tr>
-                            <tr>
-                                <td>$300</td>
-                                <td>1.3040x</td>
-                                <td class="price-highlight">$520.99</td>
-                                <td>$220.99</td>
-                            </tr>
-                            <tr>
-                                <td>$500</td>
-                                <td>1.2580x</td>
-                                <td class="price-highlight">$755.99</td>
-                                <td>$255.99</td>
-                            </tr>
-                            <tr>
-                                <td>$1000</td>
-                                <td>1.2280x</td>
-                                <td class="price-highlight">$1350.99</td>
-                                <td>$350.99</td>
-                            </tr>
-                            <tr>
-                                <td>$2000</td>
-                                <td>1.2636x</td>
-                                <td class="price-highlight">$2656.99</td>
-                                <td>$656.99</td>
-                            </tr>
-                            <tr>
-                                <td>$5000</td>
-                                <td>1.3000x</td>
-                                <td class="price-highlight">$6729.99</td>
-                                <td>$1629.99</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="table-section">
-                <h3>Laptop / Desktop (Base Labor: $150)</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Part Cost</th>
-                                <th>Multiplier</th>
-                                <th>Quote</th>
-                                <th>Margin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>$10</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$182.99</td>
-                                <td>$172.99</td>
-                            </tr>
-                            <tr>
-                                <td>$50</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$238.99</td>
-                                <td>$188.99</td>
-                            </tr>
-                            <tr>
-                                <td>$100</td>
-                                <td>1.3500x</td>
-                                <td class="price-highlight">$298.99</td>
-                                <td>$198.99</td>
-                            </tr>
-                            <tr>
-                                <td>$300</td>
-                                <td>1.3040x</td>
-                                <td class="price-highlight">$548.99</td>
-                                <td>$248.99</td>
-                            </tr>
-                            <tr>
-                                <td>$500</td>
-                                <td>1.2580x</td>
-                                <td class="price-highlight">$783.99</td>
-                                <td>$283.99</td>
-                            </tr>
-                            <tr>
-                                <td>$1000</td>
-                                <td>1.2280x</td>
-                                <td class="price-highlight">$1378.99</td>
-                                <td>$378.99</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="table-section">
-                <h3>Console (Base Labor: $125)</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Part Cost</th>
-                                <th>Multiplier</th>
-                                <th>Quote</th>
-                                <th>Margin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>$10</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$168.99</td>
-                                <td>$158.99</td>
-                            </tr>
-                            <tr>
-                                <td>$50</td>
-                                <td>1.4000x</td>
-                                <td class="price-highlight">$224.99</td>
-                                <td>$174.99</td>
-                            </tr>
-                            <tr>
-                                <td>$100</td>
-                                <td>1.3500x</td>
-                                <td class="price-highlight">$284.99</td>
-                                <td>$184.99</td>
-                            </tr>
-                            <tr>
-                                <td>$300</td>
-                                <td>1.3040x</td>
-                                <td class="price-highlight">$534.99</td>
-                                <td>$234.99</td>
-                            </tr>
-                            <tr>
-                                <td>$500</td>
-                                <td>1.2580x</td>
-                                <td class="price-highlight">$769.99</td>
-                                <td>$269.99</td>
-                            </tr>
-                            <tr>
-                                <td>$1000</td>
-                                <td>1.2280x</td>
-                                <td class="price-highlight">$1364.99</td>
-                                <td>$364.99</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -608,6 +354,7 @@
     </script>
 </body>
 </html>
+
 
 
 
