@@ -93,6 +93,10 @@
             margin-bottom: 8px;
         }
 
+        .add-on.hidden {
+            display: none;
+        }
+
         .add-on input[type="checkbox"] {
             width: 16px;
             height: 16px;
@@ -255,7 +259,7 @@
                     <span class="add-on-price">$149.99</span>
                 </label>
             </div>
-            <div class="add-on">
+            <div class="add-on" id="expedited-repair-container">
                 <input type="checkbox" id="expedited-repair" value="49.99">
                 <label for="expedited-repair">
                     <span class="add-on-name">Expedited Repair</span>
@@ -327,6 +331,7 @@
             const deviceType = document.getElementById('device-type').value;
             const basicCleaningPriceSpan = document.getElementById('basic-cleaning-price');
             const liquidCleaningPriceSpan = document.getElementById('liquid-cleaning-price');
+            const expeditedRepairContainer = document.getElementById('expedited-repair-container');
             
             if (deviceType && basicCleaningPrices[deviceType]) {
                 basicCleaningPriceSpan.textContent = '$' + basicCleaningPrices[deviceType].toFixed(2);
@@ -338,6 +343,14 @@
                 liquidCleaningPriceSpan.textContent = '$' + liquidCleaningPrices[deviceType].toFixed(2);
             } else {
                 liquidCleaningPriceSpan.textContent = '$149.99';
+            }
+
+            // Hide expedited repair for phones
+            if (deviceType === 'phone') {
+                expeditedRepairContainer.classList.add('hidden');
+                document.getElementById('expedited-repair').checked = false;
+            } else {
+                expeditedRepairContainer.classList.remove('hidden');
             }
         }
 
@@ -368,14 +381,15 @@
                 addOnTotal += liquidCleaningPrices[deviceType];
             }
             
-            // Other add-ons (fixed pricing)
-            const otherAddOns = ['data-transfer', 'expedited-repair'];
-            otherAddOns.forEach(addOnId => {
-                const checkbox = document.getElementById(addOnId);
-                if (checkbox.checked) {
-                    addOnTotal += parseFloat(checkbox.value);
-                }
-            });
+            // Data Transfer (fixed pricing)
+            if (document.getElementById('data-transfer').checked) {
+                addOnTotal += 149.99;
+            }
+            
+            // Expedited Repair (fixed pricing, only if not phone)
+            if (deviceType !== 'phone' && document.getElementById('expedited-repair').checked) {
+                addOnTotal += 49.99;
+            }
 
             const finalQuote = baseQuote + addOnTotal;
             const margin = finalQuote - partCost;
@@ -398,6 +412,7 @@
             document.getElementById('breakdown-margin').textContent = '$0.00';
             document.getElementById('basic-cleaning-price').textContent = '$39.99';
             document.getElementById('liquid-cleaning-price').textContent = '$149.99';
+            document.getElementById('expedited-repair-container').classList.remove('hidden');
         }
     </script>
 </body>
